@@ -1,143 +1,91 @@
-<link rel="stylesheet" href="style.css"></link>
-<a href="#" id="sidebar-toggle">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
- </a>
- 
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
-        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
-        <link type="text/css" rel="stylesheet" href="style.css">
-        <title>Budgety</title>
-    </head>
-    <body>
-      <h1 id="sudoku_title">SUDOKU</h1>
- 
-      <div id="sudoku_menu">
-        <ul>
-          <li><a class="restart" href="#">New Game</a></li>
-          <li></li>
-        </ul>
-      </div>
-      
-      <div id="sudoku_container"></div>
-        <div class="top">
-            <div class="budget">
-                <div class="budget__title">
-                    Available Budget in <span class="budget__title--month">%Month%</span>:
-                </div>
-                
-                <div class="budget__value">+ 2,345.64</div>
-                
-                <div class="budget__income clearfix">
-                    <div class="budget__income--text">Income</div>
-                    <div class="right">
-                        <div class="budget__income--value">+ 4,300.00</div>
-                        <div class="budget__income--percentage">&nbsp;</div>
-                    </div>
-                </div>
-                
-                <div class="budget__expenses clearfix">
-                    <div class="budget__expenses--text">Expenses</div>
-                    <div class="right clearfix">
-                        <div class="budget__expenses--value">- 1,954.36</div>
-                        <div class="budget__expenses--percentage">45%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-        <div class="bottom">
-            <div class="add">
-                <div class="add__container">
-                    <select class="add__type">
-                        <option value="inc" selected>+</option>
-                        <option value="exp">-</option>
-                    </select>
-                    <input type="text" class="add__description" placeholder="Add description">
-                    <input type="number" class="add__value" placeholder="Value">
-                    <button class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
-                </div>
-            </div>
-            
-            <div class="container clearfix">
-                <div class="income">
-                    <h2 class="icome__title">Income</h2>
-                    
-                    <div class="income__list">
-                       
-                        <!--
-                        <div class="item clearfix" id="income-0">
-                            <div class="item__description">Salary</div>
-                            <div class="right clearfix">
-                                <div class="item__value">+ 2,100.00</div>
-                                <div class="item__delete">
-                                    <button class="item__delete--btn">
-                                        <i class="ion-ios-close-outline"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="item clearfix" id="income-1">
-                            <div class="item__description">Sold car</div>
-                            <div class="right clearfix">
-                                <div class="item__value">+ 1,500.00</div>
-                                <div class="item__delete">
-                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        -->
-                        
-                    </div>
-                </div>
-                
-                
-                
-                <div class="expenses">
-                    <h2 class="expenses__title">Expenses</h2>
-                    
-                    <div class="expenses__list">
-                       
-                        <!--
-                        <div class="item clearfix" id="expense-0">
-                            <div class="item__description">Apartment rent</div>
-                            <div class="right clearfix">
-                                <div class="item__value">- 900.00</div>
-                                <div class="item__percentage">21%</div>
-                                <div class="item__delete">
-                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
-                                </div>
-                            </div>
-                        </div>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-                        <div class="item clearfix" id="expense-1">
-                            <div class="item__description">Grocery shopping</div>
-                            <div class="right clearfix">
-                                <div class="item__value">- 435.28</div>
-                                <div class="item__percentage">10%</div>
-                                <div class="item__delete">
-                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        -->
-                        
-                    </div>
-                </div>
-            </div>
-            
-            
-        </div>
-        
-        <script src="app.js"></script>
-    </body>
+	<title>Sudoku</title>
+
+	<!--Put Google Fonts and jQuery CDN here -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+
+
+</head>
+<body>
+	<div class="wrapper">
+		<section id="headingSection">
+			<!--<img class="logo" src="img/sudokuberlogo.png">-->
+			<h1 id="pageHeading">Here is the puzzle. Good luck!</h1>
+		</section>
+		<section id="mainSection">
+			<table class="puzzleContainer center" id="grid" >
+				<tr>
+					<td id='r0-c0'></td><td id='r0-c1'></td><td id='r0-c2'></td>
+					<td id='r0-c3'></td><td id='r0-c4'></td><td id='r0-c5'></td>
+					<td id='r0-c6'></td><td id='r0-c7'></td><td id='r0-c8'></td>
+				</tr>
+				<tr>
+					<td id='r1-c0'></td><td id='r1-c1'></td><td id='r1-c2'></td>
+					<td id='r1-c3'></td><td id='r1-c4'></td><td id='r1-c5'></td>
+					<td id='r1-c6'></td><td id='r1-c7'></td><td id='r1-c8'></td>
+				</tr>
+				<tr>
+					<td id='r2-c0'></td><td id='r2-c1'></td><td id='r2-c2'></td>
+					<td id='r2-c3'></td><td id='r2-c4'></td><td id='r2-c5'></td>
+					<td id='r2-c6'></td><td id='r2-c7'></td><td id='r2-c8'></td>
+				</tr>
+	
+	
+				<tr>
+					<td id='r3-c0'></td><td id='r3-c1'></td><td id='r3-c2'></td>
+					<td id='r3-c3'></td><td id='r3-c4'></td><td id='r3-c5'></td>
+					<td id='r3-c6'></td><td id='r3-c7'></td><td id='r3-c8'></td>
+				</tr>
+				<tr>
+					<td id='r4-c0'></td><td id='r4-c1'></td><td id='r4-c2'></td>
+					<td id='r4-c3'></td><td id='r4-c4'></td><td id='r4-c5'></td>
+					<td id='r4-c6'></td><td id='r4-c7'></td><td id='r4-c8'></td>
+				</tr>
+				<tr>
+					<td id='r5-c0'></td><td id='r5-c1'></td><td id='r5-c2'></td>
+					<td id='r5-c3'></td><td id='r5-c4'></td><td id='r5-c5'></td>
+					<td id='r5-c6'></td><td id='r5-c7'></td><td id='r5-c8'></td>
+				</tr>
+	
+	
+				<tr>
+					<td id='r6-c0'></td><td id='r6-c1'></td><td id='r6-c2'></td>
+					<td id='r6-c3'></td><td id='r6-c4'></td><td id='r6-c5'></td>
+					<td id='r6-c6'></td><td id='r6-c7'></td><td id='r6-c8'></td>
+				</tr>
+				<tr>
+					<td id='r7-c0'></td><td id='r7-c1'></td><td id='r7-c2'></td>
+					<td id='r7-c3'></td><td id='r7-c4'></td><td id='r7-c5'></td>
+					<td id='r7-c6'></td><td id='r7-c7'></td><td id='r7-c8'></td>
+				</tr>
+				<tr>
+					<td id='r8-c0'></td><td id='r8-c1'></td><td id='r8-c2'></td>
+					<td id='r8-c3'></td><td id='r8-c4'></td><td id='r8-c5'></td>
+					<td id='r8-c6'></td><td id='r8-c7'></td><td id='r8-c8'></td>
+				</tr>
+			</table>
+			<div id="statsContainer">
+				<h3>Strikes: 0</h3>
+				<h3 class="push-right"> Time: 2:16</h3>
+			</div> 
+			<div id="buttonContainer">
+				<button type="button" class="button" id="newGameButton">New</button>
+				<button type="button" class="button" id="hintButton">Hint</button>
+				<button type="button" class="button" id="solveButton">Solve</button>
+				<button type="button" class="button" id="loadButton">Load</button>
+			</div>
+
+		</section>
+	</div>
+
+	<script src="app.js"></script>
+</body>
 </html>
