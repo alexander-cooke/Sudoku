@@ -1,27 +1,31 @@
 function generateSudoku() {
 
 	var grid = [
-		[1, 2, 3, 4, 5, 6, 7, 8, 9], 
-		[4, 5, 6, 7, 8, 9, 1, 2, 3], 
-		[7, 8, 9, 1, 2, 3, 4, 5, 6], 
-		[2, 3, 4, 5, 6, 7, 8, 9, 1], 
-		[5, 6, 7, 8, 9, 1, 2, 3, 4], 
-		[8, 9, 1, 2, 3, 4, 5, 6, 7], 
-		[3, 4, 5, 6, 7, 8, 9, 1, 2], 
-		[6, 7, 8, 9, 1, 2, 3, 4, 5], 
-		[9, 1, 2, 3, 4, 5, 6, 7, 8]
+			[5, 3, 4,  6, 7, 8,  9, 1, 2], 
+			[6, 7, 2,  1, 9, 5,  3, 4, 8], 
+			[1, 9, 8,  3, 4, 2,  5, 6, 7], 
+
+			[8, 5, 9,  7, 6, 1,  4, 2, 3], 
+			[4, 2, 6,  8, 5, 3,  7, 9, 1], 
+			[7, 1, 3,  9, 2, 4,  8, 5, 6], 
+
+			[9, 6, 1,  5, 3, 7,  2, 8, 4], 
+			[2, 8, 7,  4, 1, 9,  6, 3, 5], 
+			[3, 4, 5,  2, 8, 6,  1, 7, 9]
 		];
 
 	var hGrid = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0], 
-		[0, 0, 0, 0, 0, 0, 0, 0, 0]
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+			[0, 0, 0,  0, 0, 0,  0, 0, 0],
+
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+			[0, 0, 0,  0, 0, 0,  0, 0, 0]
 		];
 
 	shuffle(grid);
@@ -174,10 +178,14 @@ $(document).ready(function() {
     $("#grid").fadeIn(1000);
     $(".emptyCell").click(function(e) {
         r = selectedTile.getAttribute('id').charAt(1);
-        c = selectedTile.getAttribute('id').charAt(3);
-        $("#numPad").fadeIn(100);
-        $("#numPad").offset({left: e.pageX - 78,top: e.pageY - 40});
-    });
+		c = selectedTile.getAttribute('id').charAt(4);
+		console.log('hello');
+		console.log(r);
+		console.log(c);
+        //$("#numPad").fadeIn(100);
+        //$("#numPad").offset({left: e.pageX - 78,top: e.pageY - 40});
+	});
+	/*
     $("#np1").click(function() { numberPad(1); });
     $("#np2").click(function() { numberPad(2); });
     $("#np3").click(function() { numberPad(3); });
@@ -195,7 +203,8 @@ $(document).ready(function() {
     $("#solve").click(function() {
         $("#numPad").fadeOut(100);
         solve();
-    });
+	});
+	*/
     
 });
 
@@ -204,7 +213,8 @@ function init() {
     puzzle = new generateSudoku();
     for(var i = 0; i < 9; i++) {
         for(var j = 0; j < 9; j++) {
-            var tile = document.getElementById("r" + i + "-c" + j);
+			var tile = document.getElementById("r" + i + "-c" + j);
+			console.log('init');
             if(puzzle.getTileNumber(i, j) === 0) {
                 tile.className = "emptyCell";
                 tile.innerHTML = "";
@@ -226,10 +236,10 @@ function tOnClick() {
     }
     else {
         deselect();
-        $("#numPad").fadeOut(100);
+        //$("#numPad").fadeOut(100);
     }
 }
-
+/*
 function numberPad(value) {
     selectedTile.innerHTML = value;
     deselect();
@@ -254,7 +264,7 @@ function numberPad(value) {
         return;
     }
 }
-
+*/
 function getFinishedGrid() {
     var fGrid = new Array(9);
     for(var i = 0; i < 9; i++) {
@@ -278,7 +288,7 @@ function checkForEmptyCells() {
 
 function deselect() {
     selectedTile.className = "emptyCell";
-    selectedTile = null;
+    //selectedTile = null;
 }
 
 function newGame() {
@@ -293,3 +303,143 @@ function solve() {
         }
     }
 }
+
+var model = (function() {
+	// Private variables 
+	var template = [
+		[5, 3, 4,  6, 7, 8,  9, 1, 2], 
+		[6, 7, 2,  1, 9, 5,  3, 4, 8], 
+		[1, 9, 8,  3, 4, 2,  5, 6, 7], 
+	
+		[8, 5, 9,  7, 6, 1,  4, 2, 3], 
+		[4, 2, 6,  8, 5, 3,  7, 9, 1], 
+		[7, 1, 3,  9, 2, 4,  8, 5, 6], 
+	
+		[9, 6, 1,  5, 3, 7,  2, 8, 4], 
+		[2, 8, 7,  4, 1, 9,  6, 3, 5], 
+		[3, 4, 5,  2, 8, 6,  1, 7, 9]
+	];
+
+	var hGrid = [
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+		[0, 0, 0,  0, 0, 0,  0, 0, 0],
+
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+		[0, 0, 0,  0, 0, 0,  0, 0, 0]
+	];
+
+	// Private functions
+	var getTileNumber = function(row, col) {
+		return hGrid[row][col];
+	};
+
+	var getSolution = function(row, col) {
+		return grid[row][col];
+	};
+
+	var isValid = function(fGrid, row, col, val) {
+		var rowCnt = this.countInstances(fGrid[row], val);
+		var colCnt = this.countInstances(this.columnToArray(fGrid, col), val);
+		var subCnt = this.countInstances(this.subsquareToArray(fGrid, row, col), val);
+		if(rowCnt == 1 && colCnt == 1 && subCnt == 1) {
+			return true;
+		}
+		return false;
+	};
+
+	var columnToArray = function(fGrid, col) {
+		var colArray = [];
+		for(var i = 0; i < 9; i++) {
+			colArray.push(fGrid[i][col]);
+		}
+		return colArray;
+	};
+
+	var subsquareToArray = function(fGrid, row, col) {
+		var subArray = [];
+		var subrow = row - (row % 3);
+		var subcol = col - (col % 3);
+		for(var i = 0; i < 3; i++) {
+			for(var j = 0; j < 3; j++) {
+				subArray.push(fGrid[i+subrow][j+subcol]);
+			}
+		}
+		return subArray;
+	};
+
+	var countInstances = function(arr, val) {
+		var cnt = 0;
+		for(var i = 0; i < arr.length; i++) {
+			if(arr[i] == val) cnt++;
+		}
+		return cnt;
+	};
+
+
+	/* Public object */
+	return {
+		getTemplate: function() {
+			return template;
+		},
+		shuffle: function() {
+
+		},
+		hide: function() {
+
+		}
+	};
+})();
+
+var view = (function() {
+	var DOMstrings = {
+        counter: 'counter',
+	};
+	
+	/* Public object */
+	return {
+		getDOMstrings: function() {
+            return DOMstrings;
+        }
+	};
+})();
+
+var controller = (function(m, v) {
+	/* Private variables */
+	var DOM = v.getDOMstrings();
+	count = 0;
+
+	/* Private functions */
+
+	/* Set up event listeners */
+
+
+	/* */
+	var createBoard = function() {
+
+	}
+
+	/* Start timer */
+	var startTimer = function () {
+		counter = document.getElementById(DOM.counter);
+		count++;
+		minutes = Math.floor(count / 60);
+		seconds = count % 60 < 10 ? "0" + count % 60 : count % 60; 
+		counter.innerHTML = minutes  + ':' + seconds;
+	}
+
+	/* Publicly returned object */
+	return {
+		init: function() {
+			console.log('Application has started.');
+			setInterval(startTimer, 1000);
+		}
+	};
+})(model, view);
+
+controller.init();
