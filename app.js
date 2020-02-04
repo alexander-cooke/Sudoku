@@ -1,312 +1,10 @@
-function generateSudoku() {
-
-	var grid = [
-			[5, 3, 4,  6, 7, 8,  9, 1, 2], 
-			[6, 7, 2,  1, 9, 5,  3, 4, 8], 
-			[1, 9, 8,  3, 4, 2,  5, 6, 7], 
-
-			[8, 5, 9,  7, 6, 1,  4, 2, 3], 
-			[4, 2, 6,  8, 5, 3,  7, 9, 1], 
-			[7, 1, 3,  9, 2, 4,  8, 5, 6], 
-
-			[9, 6, 1,  5, 3, 7,  2, 8, 4], 
-			[2, 8, 7,  4, 1, 9,  6, 3, 5], 
-			[3, 4, 5,  2, 8, 6,  1, 7, 9]
-		];
-
-	var hGrid = [
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-			[0, 0, 0,  0, 0, 0,  0, 0, 0],
-
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-			[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-			[0, 0, 0,  0, 0, 0,  0, 0, 0]
-		];
-
-	shuffle(grid);
-	hideTiles(grid, hGrid);
-
-	this.getTileNumber = function(row, col) {
-		return hGrid[row][col];
-	};
-
-	this.getSolution = function(row, col) {
-		return grid[row][col];
-	};
-
-	this.isValid = function(fGrid, row, col, val) {
-		var rowCnt = this.countInstances(fGrid[row], val);
-		var colCnt = this.countInstances(this.columnToArray(fGrid, col), val);
-		var subCnt = this.countInstances(this.subsquareToArray(fGrid, row, col), val);
-		if(rowCnt == 1 && colCnt == 1 && subCnt == 1) {
-			return true;
-		}
-		return false;
-	};
-
-	this.columnToArray = function(fGrid, col) {
-		var colArray = [];
-		for(var i = 0; i < 9; i++) {
-			colArray.push(fGrid[i][col]);
-		}
-		return colArray;
-	};
-
-	this.subsquareToArray = function(fGrid, row, col) {
-		var subArray = [];
-		var subrow = row - (row % 3);
-		var subcol = col - (col % 3);
-		for(var i = 0; i < 3; i++) {
-			for(var j = 0; j < 3; j++) {
-				subArray.push(fGrid[i+subrow][j+subcol]);
-			}
-		}
-		return subArray;
-	};
-
-	this.countInstances = function(arr, val) {
-		var cnt = 0;
-		for(var i = 0; i < arr.length; i++) {
-			if(arr[i] == val) cnt++;
-		}
-		return cnt;
-	};
-}
-
-function shuffle(grid) {
-
-	var i, j, k, temp, col, col1, col2,
-	row1, row2, sub, sub1, sub2, num1, num2;
-
-	//swap the same columns of each subsquare
-	for(i = 0; i < 25; i++) {
-		col = Math.floor(Math.random()*3);
-		sub1 = Math.floor(Math.random()*3);
-		sub2 = Math.floor(Math.random()*3);
-		for(j = 0; j < grid.length; j++) {
-			temp = grid[j][col + sub1*3];
-			grid[j][col + sub1*3] = grid[j][col + sub2*3];
-			grid[j][col + sub2*3] = temp;
-		}
-	}
-
-	//swap all columns within each subsquare
-	for(i = 0; i < 25; i++) {
-		sub = Math.floor(Math.random()*3);
-		col1 = Math.floor(Math.random()*3);
-		col2 = Math.floor(Math.random()*3);
-		while(col1 == col2) col2 = Math.floor(Math.random()*3);
-		for(j = 0; j < grid.length; j++) {
-			temp = grid[j][sub*3 + col1];
-			grid[j][sub*3 + col1] = grid[j][sub*3 + col2];
-			grid[j][sub*3 + col2] = temp;
-		}
-	}
-
-	//swap all rows within each subsquare
-	for(i = 0; i < 25; i++) {
-		sub = Math.floor(Math.random()*3);
-		row1 = Math.floor(Math.random()*3);
-		row2 = Math.floor(Math.random()*3);
-		while(row1 == row2) row2 = Math.floor(Math.random()*3);
-		for(j = 0; j < grid.length; j++) {
-			temp = grid[sub*3 + row1][j];
-			grid[sub*3 + row1][j] = grid[sub*3 + row2][j];
-			grid[sub*3 + row2][j] = temp;
-		}
-	}
-
-	//swap one number with another
-	for(i = 0; i < 25; i++) {
-		num1 = Math.floor(Math.random()*9 + 1);
-		num2 = Math.floor(Math.random()*9 + 1);
-		while(num1 == num2) num2 = Math.floor(Math.random()*9 + 1);
-		for(j = 0; j < grid.length; j++) {
-			for(k = 0; k < grid[j].length; k++) {
-				if(grid[j][k] == num1)
-					grid[j][k] = num2;
-				else if(grid[j][k] == num2)
-					grid[j][k] = num1;
-			}
-		}
-	}
-}
-
-function hideTiles(aGrid, hiddenGrid) {
-
-	// Randomly hide tiles, no guarantee for a unique solution
-	var numTiles, k;
-
-	for(var c = 0; c < 9; c++) {
-		for(var d = 0; d < 9; d++) {
-			hiddenGrid[c][d] = aGrid[c][d];
-		}
-	}
-
-	for(var i = 0; i < 4; i++) {
-		numTiles = Math.floor(Math.random()*8 + 6);
-		while(numTiles > 0) {
-			k = Math.floor(Math.random()*9);
-			hiddenGrid[i][k] = 0;
-			hiddenGrid[8-i][8-k] = 0;
-			numTiles--;
-			
-		}
-	}
-
-	numTiles = Math.floor(Math.random()*4 + 2);
-	while(numTiles > 0) {
-		k = Math.floor(Math.random()*4);
-		hiddenGrid[4][k] = 0;
-		hiddenGrid[4][8-k] = 0;
-		numTiles--;
-	}
-}
-
-
-var puzzle;
-var selectedTile;
-var r, c;
-
-$(document).ready(function() {
-    init();
-    $("#grid").fadeIn(1000);
-    $(".emptyCell").click(function(e) {
-        r = selectedTile.getAttribute('id').charAt(1);
-		c = selectedTile.getAttribute('id').charAt(4);
-		console.log('hello');
-		console.log(r);
-		console.log(c);
-        //$("#numPad").fadeIn(100);
-        //$("#numPad").offset({left: e.pageX - 78,top: e.pageY - 40});
-	});
-	/*
-    $("#np1").click(function() { numberPad(1); });
-    $("#np2").click(function() { numberPad(2); });
-    $("#np3").click(function() { numberPad(3); });
-    $("#np4").click(function() { numberPad(4); });
-    $("#np5").click(function() { numberPad(5); });
-    $("#np6").click(function() { numberPad(6); });
-    $("#np7").click(function() { numberPad(7); });
-    $("#np8").click(function() { numberPad(8); });
-    $("#np9").click(function() { numberPad(9); });
-    $("#npx").click(function() { numberPad(""); });
-    $(".mistakeScreen").click(function() {
-        $(".mistakeScreen").fadeOut(100);
-    });
-    $("#newGame").click(function() { newGame(); });
-    $("#solve").click(function() {
-        $("#numPad").fadeOut(100);
-        solve();
-	});
-	*/
+var sudokuBoard = ( function() {
+    // PRIVATE VARIABLES
+    var masterBoard = []; // This board will contain the solution for the game.
+    var playerBoard = []; // This board will be a partially-empty copy 
+                          // of the master board for the player
     
-});
-
-
-function init() {
-    puzzle = new generateSudoku();
-    for(var i = 0; i < 9; i++) {
-        for(var j = 0; j < 9; j++) {
-			var tile = document.getElementById("r" + i + "-c" + j);
-			console.log('init');
-            if(puzzle.getTileNumber(i, j) === 0) {
-                tile.className = "emptyCell";
-                tile.innerHTML = "";
-                tile.onclick = tOnClick;
-            }
-            else {
-                tile.style.backgroundColor = "#ecf4f3";
-                tile.className = "cell";
-                tile.innerHTML = puzzle.getTileNumber(i, j);
-            }
-        }
-    }
-}
-
-function tOnClick() {
-    if(selectedTile == null) {
-        selectedTile = this;
-        selectedTile.className = "emptyCell selected";
-    }
-    else {
-        deselect();
-        //$("#numPad").fadeOut(100);
-    }
-}
-/*
-function numberPad(value) {
-    selectedTile.innerHTML = value;
-    deselect();
-    $("#numPad").fadeOut(100);
-    if(checkForEmptyCells() === true) {
-        var fGrid = getFinishedGrid();
-        for(var i = 0; i < 9; i++) {
-            for(var j = 0; j < 9; j++) {
-                var t = document.getElementById("t" + i + "x" + j);
-                if(t.classList.contains("emptyCell")) {
-                    if(puzzle.isValid(fGrid, i, j, t.innerHTML)) {
-                        continue;
-                    }
-                    else {
-                        $(".mistakeScreen").fadeIn(100);
-                        return;
-                    }
-                }
-            }
-        }
-        $(".winScreen").fadeIn(100);
-        return;
-    }
-}
-*/
-function getFinishedGrid() {
-    var fGrid = new Array(9);
-    for(var i = 0; i < 9; i++) {
-        fGrid[i] = new Array(9);
-        for(var j = 0; j < 9; j++) {
-            fGrid[i][j] = document.getElementById("t" + i + "x" + j).innerHTML;
-        }
-    }
-    return fGrid;
-}
-
-function checkForEmptyCells() {
-    for(var l = 0; l < 9; l++) {
-        for(var k = 0; k < 9; k++) {
-            var tile = document.getElementById("t" + l + "x" + k);
-            if(tile.innerHTML == "") return false;
-        }
-    }
-    return true;
-}
-
-function deselect() {
-    selectedTile.className = "emptyCell";
-    //selectedTile = null;
-}
-
-function newGame() {
-    location.reload();
-}
-
-function solve() {
-    for(var i = 0; i < 9; i++) {
-        for(var j = 0; j < 9; j++) {
-            var tile = document.getElementById("t" + i + "x" + j);
-            tile.innerHTML = puzzle.getSolution(i, j);
-        }
-    }
-}
-
-var model = (function() {
-	// Private variables 
-	var template = [
+    var templateBoard = [ // This valid solution will be used to generate different master boards by shuffling.
 		[5, 3, 4,  6, 7, 8,  9, 1, 2], 
 		[6, 7, 2,  1, 9, 5,  3, 4, 8], 
 		[1, 9, 8,  3, 4, 2,  5, 6, 7], 
@@ -318,128 +16,366 @@ var model = (function() {
 		[9, 6, 1,  5, 3, 7,  2, 8, 4], 
 		[2, 8, 7,  4, 1, 9,  6, 3, 5], 
 		[3, 4, 5,  2, 8, 6,  1, 7, 9]
-	];
+    ];
 
-	var hGrid = [
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
+    // PRIVATE UTILITY METHODS
+    // Generates random between lower (inclusive) and upper (exclusive)
+    function generateRandomNumBetween(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower) + lower)
+    }
+    
+    // Turn rows into columns and columns into rows.
+    function inverseBoard(board) {
+        let inverse = [];
 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0],
-
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0], 
-		[0, 0, 0,  0, 0, 0,  0, 0, 0]
-	];
-
-	// Private functions
-	var getTileNumber = function(row, col) {
-		return hGrid[row][col];
-	};
-
-	var getSolution = function(row, col) {
-		return grid[row][col];
-	};
-
-	var isValid = function(fGrid, row, col, val) {
-		var rowCnt = this.countInstances(fGrid[row], val);
-		var colCnt = this.countInstances(this.columnToArray(fGrid, col), val);
-		var subCnt = this.countInstances(this.subsquareToArray(fGrid, row, col), val);
-		if(rowCnt == 1 && colCnt == 1 && subCnt == 1) {
-			return true;
-		}
-		return false;
-	};
-
-	var columnToArray = function(fGrid, col) {
-		var colArray = [];
-		for(var i = 0; i < 9; i++) {
-			colArray.push(fGrid[i][col]);
-		}
-		return colArray;
-	};
-
-	var subsquareToArray = function(fGrid, row, col) {
-		var subArray = [];
-		var subrow = row - (row % 3);
-		var subcol = col - (col % 3);
-		for(var i = 0; i < 3; i++) {
-			for(var j = 0; j < 3; j++) {
-				subArray.push(fGrid[i+subrow][j+subcol]);
-			}
-		}
-		return subArray;
-	};
-
-	var countInstances = function(arr, val) {
-		var cnt = 0;
-		for(var i = 0; i < arr.length; i++) {
-			if(arr[i] == val) cnt++;
-		}
-		return cnt;
-	};
-
-
-	/* Public object */
-	return {
-		getTemplate: function() {
-			return template;
-		},
-		shuffle: function() {
-
-		},
-		hide: function() {
-
-		}
-	};
-})();
-
-var view = (function() {
-	var DOMstrings = {
-        counter: 'counter',
-	};
-	
-	/* Public object */
-	return {
-		getDOMstrings: function() {
-            return DOMstrings;
+        for( let i = 0; i < board.length; i++ ) {
+            let columnToRow = []
+            for( let j = 0; j < 9; j++ ) {
+                columnToRow.push(board[j][i])
+            }
+            inverse.push(columnToRow);
         }
-	};
+        return inverse;
+    }
+
+    function hideTilesAtRandom(board) 
+    {
+        let numberOfEmptyCells, randIndex;
+
+        for( let i = 0; i < 9; i++) {
+            numberOfEmptyCells = generateRandomNumBetween(2, 6);
+            for( let j = 0; j < numberOfEmptyCells; j++) {
+                randIndex = generateRandomNumBetween(0, 8);
+                board[i][randIndex] = 0;
+            }
+        }
+    }
+
+    // Fisher-Yates shuffling algorithm - O(n)
+    function shuffleArray(arr) 
+    {
+        let temp, j;
+
+        for( i = arr.length - 1; i >= 0; i--) {
+            j = generateRandomNumBetween(0, i);
+            temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+        return arr;
+    }
+
+    // Shuffle the template board
+    function shuffle() {
+        let subRow1, subRow2, subRow3, rowShuffleBoard;
+        let subCol1, subCol2, subCol3, colShuffleBoard;
+        let subsquareRowShuffleBoard;
+
+        // Shuffle each row within each individual subsquare row
+        subRow1 = shuffleArray(templateBoard.slice(0,3));
+        subRow2 = shuffleArray(templateBoard.slice(3,6));
+        subRow3 = shuffleArray(templateBoard.slice(6,9));
+        rowShuffleBoard = subRow1.concat(subRow2).concat(subRow3);
+
+        // Shuffle each column within each individual subsquare column
+        rowShuffleBoard = inverseBoard(rowShuffleBoard);
+        subCol1 = shuffleArray(rowShuffleBoard.slice(0,3));
+        subCol2 = shuffleArray(rowShuffleBoard.slice(3,6));
+        subCol3 = shuffleArray(rowShuffleBoard.slice(6,9));
+        colShuffleBoard = subCol1.concat(subCol2).concat(subCol3);
+
+        // Shuffle each subsquare row
+        subRow1 = colShuffleBoard.slice(0,3);
+        subRow2 = colShuffleBoard.slice(3,6);
+        subRow3 = colShuffleBoard.slice(6,9);
+        subsquareRowShuffleBoard = [];
+        subsquareRowShuffleBoard.push(subRow1);
+        subsquareRowShuffleBoard.push(subRow2);
+        subsquareRowShuffleBoard.push(subRow3);
+        subsquareRowShuffleBoard = shuffleArray(subsquareRowShuffleBoard);
+        subsquareRowShuffleBoard = subsquareRowShuffleBoard[0]
+                        .concat(subsquareRowShuffleBoard[1])
+                        .concat(subsquareRowShuffleBoard[2]);
+
+        // Shuffle each subsquare column
+        subsquareRowShuffleBoard = inverseBoard(subsquareRowShuffleBoard);
+        subCol1 = shuffleArray(subsquareRowShuffleBoard.slice(0,3));
+        subCol2 = shuffleArray(subsquareRowShuffleBoard.slice(3,6));
+        subCol3 = shuffleArray(subsquareRowShuffleBoard.slice(6,9));
+
+        return subCol1.concat(subCol2).concat(subCol3);
+    };
+
+    function findNextEmptySquarePosition(board)
+    {
+        let emptySquarePosition = [];
+        let foundEmptySquare = false;
+ 
+        for( let i = 0; i < board.length; i++ ) {
+            for( let j = 0; j < board[0].length; j++ ) {
+                if(!foundEmptySquare && board[i][j] == 0) {
+                    emptySquarePosition[0] = i;
+                    emptySquarePosition[1] = j;
+                    foundEmptySquare = true;
+                }
+            }
+        }
+        return emptySquarePosition;
+    };
+
+    // PUBLIC INTERFACE
+    return {
+        makePlayerBoard: function() {
+            masterBoard = shuffle();
+            playerBoard = masterBoard.map(inner => inner.slice());
+            hideTilesAtRandom(playerBoard);
+            return playerBoard;
+        },
+
+        getPlayerBoard: function() {
+            return playerBoard;
+        },
+
+        getCellValue: function(row, col) {
+			return playerBoard[row][col];
+        },
+
+        setCellValue: function(row, col, value) {
+            playerBoard[row][col] = value;
+        },
+
+        stillPartiallyEmpty: function() {
+            let foundEmptySquare = false;
+
+            for( let i = 0; i < playerBoard.length; i++ ) {
+                for( let j = 0; j < playerBoard[0].length; j++ ) {
+                    if( playerBoard[i][j] == 0) {
+                        foundEmptySquare = true;
+                    }
+                }
+            }
+            return foundEmptySquare;
+        },
+
+        solve: function() {
+            playerBoard = Array.from(masterBoard);
+        },
+
+        giveHint: function() {
+            let [x, y] = findNextEmptySquarePosition(playerBoard);
+            playerBoard[x][y] = masterBoard[x][y];
+            return [x, y];
+        },
+
+
+        /* 
+        This function checks to see whether the last number added
+        to the board during backtracking satisfies the constraints of the game
+        (i.e. the same number can't already exist within the row, column or box
+        to which the new number belongs)
+        numValue: value of the number attempting to be added (1-9)
+        x: x-coordinate of the position where number is being placed
+        y: y-coordinate of the position where number is being placed
+
+        For checking the box, each of the nine boxes are represented by the
+            following coordinates.
+                |       |
+          (0,0) | (1,0) | (2,0)
+                |       |
+            - - - - - - - - - - -
+                |       |
+          (0,1) | (1,1) | (2,1)
+                |       |
+            - - - - - - - - - - -
+                |       |
+          (0,2) | (1,2) | (2,2)
+                |       |
+        */
+
+        checkIfLegalMove: function(row, column, value, conflictLocation) {
+            let legalMove = true;
+                
+            // Check row
+            for( let i = 0; i < playerBoard[0].length; i++) {
+                if( playerBoard[row][i] === value) {
+                    legalMove = false;
+                    conflictLocation[0] = row;
+                    conflictLocation[1] = i
+                }
+            }
+
+            // Check column
+            for( let i = 0; i < playerBoard.length; i++) {
+                if( playerBoard[i][column] === value) {
+                    legalMove = false;
+                    conflictLocation[0] = i
+                    conflictLocation[1] = column;
+                }
+            }
+
+            // Check subsquare
+            var boxX = Math.floor(column / 3);
+            var boxY = Math.floor(row / 3);
+
+            for( let i = boxY * 3; i < boxY * 3 + 3; i++) {
+                for( let j = boxX * 3; j < boxX * 3 + 3; j++) {
+                    if(playerBoard[i][j] == value) {
+                        legalMove = false;
+                        conflictLocation[0] = i;
+                        conflictLocation[1] = j;
+                    }
+                }
+            }
+            
+            return legalMove;
+        }
+    }
 })();
 
-var controller = (function(m, v) {
-	/* Private variables */
-	var DOM = v.getDOMstrings();
-	count = 0;
+var controller = (function(s) {    
+    let count = 0;
+    let intervalID = 0;
+    let selectedTile;
+    let conflictLocation = [];
+    let rowOfSelectedTile, columnOfSelectedTile;
 
-	/* Private functions */
+    function setupEventHandlers()
+    {
+        document.querySelectorAll('.numberOnPad').forEach(item => {
+            item.addEventListener('click', event => {
+                tryToAddValueToSelectedTile(parseInt(item.innerHTML));
+            });
+        });
 
-	/* Set up event listeners */
+        document.addEventListener('keypress', function(event) {
+            if ((event.keyCode >= 49 && event.keyCode <= 57)) {
+                tryToAddValueToSelectedTile(parseInt(String.fromCharCode(event.keyCode)));
+            }
+        });
 
+        document.addEventListener('keydown', function(event){
+            if( event.keyCode === 8 ) {
+                selectedTile.innerHTML = "";
+            }
+        });
 
-	/* */
-	var createBoard = function() {
+        document.getElementById('newGameButton').addEventListener('click', function(event){
+            restart();
+        });
 
-	}
+        document.getElementById('hintButton').addEventListener('click', function(event) {
+            if (sudokuBoard.stillPartiallyEmpty()) {
+                let [x, y] = sudokuBoard.giveHint();
+                let tile = document.getElementById("r" + x + "-c" + y);
+                tile.className = "cell";
+                tile.innerHTML = s.getCellValue(x, y);
+            }
+        });
+
+        document.getElementById('solveButton').addEventListener('click', function(event) {
+            sudokuBoard.solve();
+            populateGrid();
+        });
+    }
+
+    function restart() {
+        clearInterval(intervalID);
+        count = 0;
+        counter = document.getElementById('counter').innerHTML = "0:00";
+        strikes = document.getElementById('strikeCounter').innerHTML = "";
+        intervalID = setInterval(startTimer, 1000);
+        sudokuBoard.makePlayerBoard();
+        populateGrid();
+        $("#grid").fadeIn(1000);
+        $("#numPad").fadeIn(1000);
+    }
+ 
+    function populateGrid() {
+        for(let i = 0; i < 9; i++) {
+            for(let j = 0; j < 9; j++) {
+                let tile = document.getElementById("r" + i + "-c" + j);
+                if(s.getCellValue(i, j) == 0) {
+                    tile.className = "emptyCell";
+                    tile.innerHTML = "";
+                    tile.onclick = function() {
+                        if( selectedTile != this) {
+                            if( selectedTile != null ) {
+                                selectedTile.className = "emptyCell";
+                            }
+                            selectedTile = this;
+                            rowOfSelectedTile = selectedTile.getAttribute('id').charAt(1);
+                            columnOfSelectedTile = selectedTile.getAttribute('id').charAt(4);
+                            selectedTile.className = "emptyCell selected";
+                        }
+                    }
+                }
+                else {
+                    tile.className = "cell";
+                    tile.innerHTML = s.getCellValue(i, j);
+                }
+            }
+        }
+    }
+
+    function gameOver() {
+        alert('You lost.');
+        restart();
+    }
+
+    function tryToAddValueToSelectedTile(value) {
+        if( selectedTile != null ) {
+            if( sudokuBoard.checkIfLegalMove(rowOfSelectedTile, 
+                                             columnOfSelectedTile, 
+                                             value, 
+                                             conflictLocation)) {
+                    selectedTile.innerHTML = value;
+                    sudokuBoard.setCellValue(rowOfSelectedTile, 
+                                             columnOfSelectedTile, 
+                                             value);
+            }
+            else {
+                //Add a strike
+                document.getElementById("strikeCounter").innerHTML = document.getElementById("strikeCounter").innerHTML + 'X';
+
+                //Momentarily highlight the offending number using conflictLocation
+                let tile = document.getElementById("r" + conflictLocation[0] + "-c" + conflictLocation[1]);
+                let prevColour = tile.style.backgroundColor;
+                tile.style.backgroundColor = "#cc2c4f";
+                
+                setTimeout(function() {
+                    tile.style.backgroundColor = prevColour;
+                },1000);
+                
+                if( document.getElementById("strikeCounter").innerHTML.toString().length >= 4 ) {
+                    gameOver();
+                }
+            }        
+        }
+    }
 
 	/* Start timer */
 	var startTimer = function () {
-		counter = document.getElementById(DOM.counter);
+		counter = document.getElementById('counter');
 		count++;
 		minutes = Math.floor(count / 60);
 		seconds = count % 60 < 10 ? "0" + count % 60 : count % 60; 
 		counter.innerHTML = minutes  + ':' + seconds;
-	}
-
+    }
+    
 	/* Publicly returned object */
 	return {
 		init: function() {
-			console.log('Application has started.');
-			setInterval(startTimer, 1000);
+            intervalID = setInterval(startTimer, 1000);
+            sudokuBoard.makePlayerBoard();
+            populateGrid();
+            $("#grid").fadeIn(1000);
+            $("#numPad").fadeIn(1000);
+            setupEventHandlers();
 		}
 	};
-})(model, view);
+})(sudokuBoard);
 
 controller.init();
+
+
+  

@@ -5,18 +5,13 @@ body {
 	position: relative;
 	text-align: center;
 	background: #E0FBFC;
-	border: 1px solid salmon;
-}
 
-#pageHeading {
-	border: 1px solid salmon;
 }
 
 .wrapper {
 	width: 100%;
 	max-width: 700px;
 	margin: 0 auto;
-	border: 1px solid salmon;
 }
 img.logo {
 	display: block;
@@ -30,24 +25,15 @@ img.logo {
     margin-right: auto;
 }
 
-#headingSection {
-}
 
 #mainSection {
     position: relative;
-}
-
-#numPadContainer {
-}
-
-.puzzleContainer {
 }
 
 #buttonContainer {
 	width: 100%;
 	max-width: 385px;
 	margin: 0 auto;
-	border: 1px solid salmon;
 	display: flex;
 }
 
@@ -69,7 +55,6 @@ img.logo {
 	width: 100%;
 	max-width: 385px;
 	margin: 0 auto;
-	border: 1px solid salmon;
 	display: flex;
 }
 
@@ -91,21 +76,22 @@ td.cell  {
 	border: 2px solid #3D5A80;
 	padding: 0;
 	cursor: not-allowed;
+	background-color: rgb(240, 241, 245);
 }
 
 td.emptyCell {
 	border: 2px solid #3D5A80;
 	padding: 0;
 	cursor: pointer;
-	background-color: azure;
+	background-color: rgb(255, 255, 255);
 }
 
 td:hover {
-	background-color:#f2e5ee;
+	background-color:#f2e5ee !important;
 }
 
 td.selected {
-	background-color:#ffbce2;
+	background-color:#ffbce2 !important;
 }
 
 #r0-c2, #r0-c5, #r1-c2, #r1-c5, #r2-c5,

@@ -6,8 +6,6 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
 	<title>Sudoku</title>
-
-	<!--Put Google Fonts and jQuery CDN here -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 	<link href="style.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
@@ -15,7 +13,6 @@
 <body>
 	<div class="wrapper">
 		<section id="headingSection">
-			<!--<img class="logo" src="img/sudokuberlogo.png">-->
 			<h1 id="pageHeading">Here is the puzzle. Good luck!</h1>
 		</section>
 		<section id="mainSection">
@@ -70,16 +67,23 @@
 					<td id='r8-c6'></td><td id='r8-c7'></td><td id='r8-c8'></td>
 				</tr>
 			</table>
-			<div id="statsContainer">
-				<h3>Strikes: 0</h3>
-				<h3 class="push-right"> Time: <span id="counter">0:00</span></h3>
-			</div> 
+			<table class="puzzleContainer center" id="numPad">
+				<tr>
+					<td class="numberOnPad emptyCell" id='one'>1</td><td class="numberOnPad emptyCell" id='two'>2</td><td class="numberOnPad emptyCell" id='three'>3</td>
+					<td class="numberOnPad emptyCell" id='four'>4</td><td class="numberOnPad emptyCell" id='five'>5</td><td class="numberOnPad emptyCell" id='six'>6</td>
+					<td class="numberOnPad emptyCell" id='seven'>7</td><td class="numberOnPad emptyCell" id='eight'>8</td><td class="numberOnPad emptyCell" id='nine'>9</td>
+				</tr>
+			</table>
 			<div id="buttonContainer">
 				<button type="button" class="button" id="newGameButton">New</button>
 				<button type="button" class="button" id="hintButton">Hint</button>
 				<button type="button" class="button" id="solveButton">Solve</button>
-				<button type="button" class="button" id="loadButton">Load</button>
 			</div>
+			<div id="statsContainer">
+				<h3 class="strikes">Strikes:<span id="strikeCounter"></span> </h3>
+				<h3 class="push-right"> Time: <span id="counter">0:00</span></h3>
+			</div> 
+
 
 		</section>
 	</div>
