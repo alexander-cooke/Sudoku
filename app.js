@@ -364,14 +364,14 @@ var controller = (function(s) {
     
 	/* Publicly returned object */
 	return {
-		init: function() {
-            intervalID = setInterval(startTimer, 1000);
-            sudokuBoard.makePlayerBoard();
-            populateGrid();
-            $("#grid").fadeIn(1000);
-            $("#numPad").fadeIn(1000);
-            setupEventHandlers();
-		}
+            init: function() {
+                intervalID = setInterval(startTimer, 1000);
+                sudokuBoard.makePlayerBoard();
+                populateGrid();
+                $("#grid").fadeIn(1000);
+                $("#numPad").fadeIn(1000);
+                setupEventHandlers();
+		    }
 	};
 })(sudokuBoard);
 
