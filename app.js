@@ -256,6 +256,7 @@ var controller = (function(s) {
         document.addEventListener('keydown', function(event){
             if( event.keyCode === 8 ) {
                 selectedTile.innerHTML = "";
+                sudokuBoard.setCellValue(rowOfSelectedTile, columnOfSelectedTile, 0);
             }
         });
 
