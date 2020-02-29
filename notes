@@ -1,9 +1,0 @@
-To horizontally center a block element (like a div), use margin: auto
-The width can then be expressed as a percentage.
-For example, when the following class is attached to an element, it'll be centered in the middle 80% of the screen
-.center {
-  margin: auto;
-  width: 80%;
-  border: 3px solid #73AD21;
-  padding: 10px;
-}
